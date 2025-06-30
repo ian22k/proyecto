@@ -4,17 +4,41 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 from scipy.fft import fft, fftfreq
+import kagglehub
+import os
 
+# Descargar el dataset desde KaggleHub
+path = kagglehub.dataset_download("mlg-ulb/creditcardfraud")
+csv_path = os.path.join(path, "creditcard.csv")
+
+# Cargar CSV
+df = pd.read_csv(csv_path)
+
+
+# Transformar columna Time a formato datetime
+df["FechaHora"] = pd.to_datetime(df["Time"], unit="s", origin="2023-01-01")
+
+# Verificar valores nulos
+print(df.isnull().sum())
+
+df['Class'] = df['Class'].map({0: 'No Fraude', 1: 'Fraude'})
+
+print(df['Class'].value_counts())
+
+# Estadísticas básicas del monto
+print(df['Amount'].describe())
+
+# Tiempo en horas desde la primera transacción
+df['Hora'] = (df['Time'] // 3600).astype(int)
+
+#numero de transacciones hechas por hora 
+df['Hora'].value_counts().sort_index()
 
 
 # Configuración general
 st.set_page_config(page_title="Dashboard de Fraude Bancario", layout="wide")
 st.title(" Dashboard Transacciones")
 
-# Cargar datos
-df = pd.read_csv("transacciones_limpias.csv")
-
-df = pd.read_csv("transacciones_limpias.csv")
 
 #  Aquí haces la transformación
 df["FechaHora"] = pd.to_datetime(df["Time"], unit="s", origin="2023-01-01")
