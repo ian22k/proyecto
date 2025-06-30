@@ -12,7 +12,7 @@ path = kagglehub.dataset_download("mlg-ulb/creditcardfraud")
 csv_path = os.path.join(path, "creditcard.csv")
 
 # Cargar CSV
-df = pd.read_csv(csv_path)
+df = pd.read_csv(csv_path, encoding="latin1")
 
 
 # Transformar columna Time a formato datetime
